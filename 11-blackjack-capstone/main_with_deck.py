@@ -3,93 +3,93 @@ import random
 from clear import clear
 from cards import create_deck, hidden_card, print_cards
 
-def print_game_result(user_total, comp_total):
-    if user_total == 21 and comp_total == 21:
-        print("Two Blackjacks, what are the odds? It's a draw. 🤝")
-    elif user_total == 21:
-        print("You got Blackjack, you win! 🥳")
-    elif comp_total == 21:
-        print("Dealer has Blackjack, you lose... 😭")
+cards = create_deck() 
+
+def game_result(user_total, comp_total):
+    """Takes player scores and returns message with game result."""
+    if user_total == comp_total:
+        return "Not great, not terrible. It's a draw. 🤝"
+    elif user_total == 0:
+        return "You got Blackjack, you win! 🥳"
+    elif comp_total == 0:
+        return "Dealer has Blackjack, you lose... 😭"
     elif user_total > 21:
-        print("You overshot and unfortunatelly lost. 😭")
+        return "You overshot and lost. 😭"
     elif comp_total > 21:
-        print("Dealer overshot, you won. 🥳")
-    elif user_total == comp_total:
-        print("Not great, not terrible. It's a draw. 🤝")
+        return "Dealer went over, you won. 🥳"
     elif user_total > comp_total:
-        print("Hurray, you won. 🥳")
+        return "Hurray, you won. 🥳"
     else:
-        print("Looks like you lost, better luck next time... 😭")
+        return "Looks like you lost, better luck next time... 😭"
 
-def main():
-    if input("Do you want to play a game of Blackjack? Y/n ").lower() == 'y':
-        clear()
-        print(art.logo)
+def calc_score(cards):
+    """Takes a list of cards and returns its sum."""
+    if sum(cards) == 21:
+        return 0
+    if sum(cards) > 21 and 11 in cards:
+        cards[cards.index(11)] = 1
+    return sum(cards)
 
-        play = True
-        cards = create_deck()
-        random.shuffle(cards)   
+def deal_card(index):
+    """Takes card index and returns its value and image + index of the next card."""
+    val = cards[index]["value"]
+    img = cards[index]["ascii"]
+    index += 1
+    return val, img, index
 
-        user_cards = [cards[0]["value"],cards[2]["value"]]
-        comp_cards = [cards[1]["value"],cards[3]["value"]]
+def play_game():    
+    print(art.logo)
 
-        user_card_img = [cards[0]["ascii"],cards[2]["ascii"]]
-        comp_card_img = [cards[1]["ascii"],cards[3]["ascii"]]
+    random.shuffle(cards)
+    play = True
+    next_card_index = 0
 
-        next_card_index = 4
+    user_cards = []
+    comp_cards = []
+    user_card_img = []
+    comp_card_img = []
 
-        # round 0
-        if user_cards == [11,11]: user_cards = [1,11]
-        if comp_cards == [11,11]: comp_cards = [1,11]
-        
-        while play:
-            # print current score
-            print(f"Your current score: {sum(user_cards)}")
-            print_cards(user_card_img)
-            print(f"Computer's score: {comp_cards[0]}")
-            print_cards([comp_card_img[0], hidden_card])
+    for _ in range(2):
+        val, img, next_card_index = deal_card(next_card_index)
+        user_cards.append(val)
+        user_card_img.append(img)
 
-            # check Blackjack
-            if sum(user_cards) == 21 or sum(comp_cards) == 21:
-                play = False
+        val, img, next_card_index = deal_card(next_card_index)
+        comp_cards.append(val)
+        comp_card_img.append(img) 
 
-            # check overshoot
-            if sum(user_cards) > 21:
-                if 11 in user_cards:
-                    user_cards[user_cards.index(11)] = 1
-                    if sum(user_cards) > 21:
-                        play = False
-                else:
-                    play = False
-                    
-            # exit if game is finished (to skip computer moves)
-            if play == False: break
-            
-            if input("Type 'y' to get another card, type 'n' to pass: ") == 'y':
-                user_cards.append(cards[next_card_index]["value"])
-                user_card_img.append(cards[next_card_index]["ascii"])
-                next_card_index += 1
-            else:
-                while sum(comp_cards) < 17:
-                    comp_cards.append(cards[next_card_index]["value"])
-                    comp_card_img.append(cards[next_card_index]["ascii"])
-                    next_card_index += 1
-            
-                play = False
+    while play:
+        user_total = calc_score(user_cards)
+        comp_total = calc_score(comp_cards)
 
-        # final results
-        user_total = sum(user_cards)
-        comp_total = sum(comp_cards)
-
-        print("---------------------------------------")
-        print(f"Your final score: {user_total}")
+        print(f"Your current score: {user_total}")
         print_cards(user_card_img)
-        print(f"Computer's final score: {comp_total}")
-        print_cards(comp_card_img)
+        print(f"Computer's score: {comp_cards[0]}")
+        print_cards([comp_card_img[0], hidden_card])
+        
+        if user_total == 0 or comp_total == 0 or user_total > 21:
+            play = False
+        else:
+            if input("Type 'y' to get another card, type 'n' to pass: ") == 'y':
+                val, img, next_card_index = deal_card(next_card_index)
+                user_cards.append(val)
+                user_card_img.append(img)
+            else:
+                while comp_total < 17:
+                    val, img, next_card_index = deal_card(next_card_index)
+                    comp_cards.append(val)
+                    comp_card_img.append(img)
+                    comp_total = calc_score(comp_cards)
+                play = False
+    
+    print("---------------------------------------")
+    print(f"Your final score: {user_total}")
+    print_cards(user_card_img)
+    print(f"Computer's final score: {comp_total}")
+    print_cards(comp_card_img)
+    print(game_result(user_total, comp_total))  
 
-        print_game_result(user_total, comp_total)
-        print('')
-        
-        main()
-        
-main()
+while input("Do you want to play a game of Blackjack? Y/n ").lower() == 'y':
+    clear()
+    play_game()
+    print('')

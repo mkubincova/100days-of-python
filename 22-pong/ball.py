@@ -1,7 +1,6 @@
 from turtle import Turtle
 
 
-
 class Ball(Turtle):
     def __init__(self, position=(0, 0)):
         super().__init__()

@@ -32,7 +32,7 @@ while len(guessed_states) < 50:
         # new_data = pandas.DataFrame(states_to_learn)
         # new_data.to_csv("states_to_lear.csv")
         break
-    if answer_state in all_states:
+    if answer_state in all_states and answer_state not in guessed_states:
         state_data = data[data.state == answer_state]
         pen.goto(x=int(state_data.x.iloc[0]), y=int(state_data.y.iloc[0]))
         pen.write(answer_state)

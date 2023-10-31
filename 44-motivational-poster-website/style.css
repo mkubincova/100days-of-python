@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap');
+
+body {
+    margin: 0;
+    padding: 10px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: beige;
+}
+
+h1 {
+    font-family: 'Libre Baskerville', serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.meme {
+    max-width: 700px;
+    text-align: center;
+    padding: 20px;
+    background-color: #000;
+    color: #fff;
+}
+
+.meme img {
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    border: 2px solid #fff;
+}
+
+.meme h1 {
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+.meme p {
+    margin-top: 15px;
+    margin-bottom: 5px;
+}

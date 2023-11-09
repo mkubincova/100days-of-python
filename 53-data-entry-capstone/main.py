@@ -2,15 +2,16 @@ from bs4 import BeautifulSoup
 import requests
 import re
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 import time
 import os
 from dotenv import load_dotenv
+from seleniumbase import SB
+
 
 load_dotenv()
-GOOGLE_FORM_URL = "https://forms.gle/KdfBvikxrBi6CBUo7"
+GOOGLE_FORM_URL = "https://forms.gle/V4Dn9Hzovd2Hczur6"
 REAL_ESTATE_WEBSITE_URL = "https://appbrewery.github.io/Zillow-Clone/"
-GOOGLE_FORM_RESULTS_URL = "https://docs.google.com/forms/d/14QQTnPcKyAchZt6JrkdGrIA2cnP3VJye6ICzm1EhA9E/edit#responses"
+GOOGLE_FORM_RESULTS_URL = "https://docs.google.com/forms/d/1KyxwXbaj8HEDqon5xg4DAnI1us4CbZ9Xdr7eQR0PoRo/edit#responses"
 GMAIL_EMAIL = os.getenv('GMAIL_EMAIL')
 GMAIL_PASSWORD = os.getenv('GMAIL_PSW')
 
@@ -20,9 +21,9 @@ class DataEntryBot:
         self.links = []
         self.prices = []
         self.addresses = []
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_experimental_option("detach", True)
-        self.driver = webdriver.Chrome(options=chrome_options)
+        self.chrome_options = webdriver.ChromeOptions()
+        self.chrome_options.add_experimental_option("detach", True)
+        self.driver = webdriver.Chrome(options=self.chrome_options)
 
     def get_listings(self):
         response = requests.get(REAL_ESTATE_WEBSITE_URL)
@@ -54,37 +55,24 @@ class DataEntryBot:
             submit_button.click()
 
     def generate_table(self):
-        self.login_to_google()
-        time.sleep(3)
-        self.driver.get(GOOGLE_FORM_RESULTS_URL)
-        time.sleep(3)
+        # Bypass Google security issues with SeleniumBase
+        with SB(uc=True, headed=True) as sb:
+            # Login to google
+            sb.open("https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?response_type=code&redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&access_type=offline&client_id=407408718192.apps.googleusercontent.com&scope=email&flowName=GeneralOAuthFlow")
+            sb.type("input[type=email]", f"{GMAIL_EMAIL}\n")
+            sb.type("input[type=password]", f"{GMAIL_PASSWORD}\n")
+            time.sleep(3)
 
-        view_in_sheets_button = self.driver.find_element(by="css selector",value="[data-action-id=freebird-view-spreadsheet]")
-        view_in_sheets_button.click()
-
-        create_button = self.driver.find_element(by="xpath",value="//*[@id='yDmH0d']/div[13]/div/div[2]/div[3]/div[2]")
-        create_button.click()
-
-    def login_to_google(self):
-        self.driver.get("https://accounts.google.com/ServiceLogin?hl=en-GB")
-        time.sleep(3)
-
-        email = self.driver.find_element(by="css selector", value="input[type=email]")
-        email.send_keys(GMAIL_EMAIL)
-        email.send_keys(Keys.ENTER)
-
-        password = self.driver.find_element(by="css selector", value="input[type=password]")
-        password.send_keys(GMAIL_PASSWORD)
-        password.send_keys(Keys.ENTER)
-
-        submit_button = self.driver.find_element(by="xpath", value="//*[@id='yDmH0d']/c-wiz/div/div/div/div[2]/div[4]/div[1]/button")
-        submit_button.click()
+            # Edit form
+            sb.open(GOOGLE_FORM_RESULTS_URL)
+            sb.click("[data-action-id=freebird-view-spreadsheet]")
+            time.sleep(3)
+            sb.execute_script('document.querySelector(\'[data-id="myVLbc"]\').click();')
+            time.sleep(5)
 
 
 # Run programme
 bot = DataEntryBot()
 # bot.get_listings()
 # bot.send_form_responses()
-
-# TODO: finish login and sheet creation when account gets unblocked
 # bot.generate_table()

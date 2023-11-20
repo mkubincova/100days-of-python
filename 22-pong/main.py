@@ -64,14 +64,4 @@ while is_playing:
         time.sleep(1)
 
 
-
-
-# TODO: detect collision with paddle
-
-
-# TODO: detect when paddle misses
-
-
-# TODO: keep score
-
 screen.exitonclick()

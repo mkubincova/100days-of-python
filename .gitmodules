@@ -1,0 +1,3 @@
+[submodule "71-blog-for-deployment"]
+	path = 71-blog-for-deployment
+	url = https://github.com/mkubincova/blog-for-deployment.git

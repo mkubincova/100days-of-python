@@ -1,3 +1,6 @@
 [submodule "71-blog-for-deployment"]
 	path = 71-blog-for-deployment
 	url = https://github.com/mkubincova/blog-for-deployment.git
+[submodule "82-text-to-morse-code"]
+	path = 82-text-to-morse-code
+	url = git@github.com:mkubincova/text-to-morse-code.git

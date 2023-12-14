@@ -4,3 +4,6 @@
 [submodule "82-text-to-morse-code"]
 	path = 82-text-to-morse-code
 	url = git@github.com:mkubincova/text-to-morse-code.git
+[submodule "83-flask-portfolio-site"]
+	path = 83-flask-portfolio-site
+	url = git@github.com:mkubincova/flask-portfolio-site.git

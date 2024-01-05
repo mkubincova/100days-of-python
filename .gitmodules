@@ -7,3 +7,6 @@
 [submodule "83-flask-portfolio-site"]
 	path = 83-flask-portfolio-site
 	url = git@github.com:mkubincova/flask-portfolio-site.git
+[submodule "84-tic-tac-toe"]
+	path = 84-tic-tac-toe
+	url = https://github.com/mkubincova/tic-tac-toe.git

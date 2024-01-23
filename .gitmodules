@@ -10,3 +10,6 @@
 [submodule "84-tic-tac-toe"]
 	path = 84-tic-tac-toe
 	url = https://github.com/mkubincova/tic-tac-toe.git
+[submodule "85-watermark"]
+	path = 85-watermark
+	url = git@github.com:mkubincova/watermark.git

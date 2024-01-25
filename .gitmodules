@@ -13,3 +13,6 @@
 [submodule "85-watermark"]
 	path = 85-watermark
 	url = git@github.com:mkubincova/watermark.git
+[submodule "86-typing-speed-test"]
+	path = 86-typing-speed-test
+	url = https://github.com/mkubincova/typing-speed-test.git

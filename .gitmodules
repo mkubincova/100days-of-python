@@ -16,3 +16,6 @@
 [submodule "86-typing-speed-test"]
 	path = 86-typing-speed-test
 	url = https://github.com/mkubincova/typing-speed-test.git
+[submodule "87-breakout-game"]
+	path = 87-breakout-game
+	url = https://github.com/mkubincova/breakout-game.git

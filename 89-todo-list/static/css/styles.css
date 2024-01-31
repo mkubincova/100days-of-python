@@ -1,0 +1,11 @@
+/* This CSS file will need to be added to the styling of 
+your web pages for the styles to be rendered. */
+
+.form-check-input:checked + .form-check-label {
+    text-decoration: line-through;
+    color: grey;
+}
+
+.main-container {
+    max-width: 900px;
+}
